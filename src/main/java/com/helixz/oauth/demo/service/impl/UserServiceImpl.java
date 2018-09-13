@@ -1,4 +1,4 @@
-package com.helixz.oauth.demo.impl;
+package com.helixz.oauth.demo.service.impl;
 
 import com.helixz.oauth.demo.entity.User;
 import com.helixz.oauth.demo.repository.UserRepository;

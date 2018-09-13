@@ -2,7 +2,7 @@ package com.helixz.oauth.demo.config;
 
 import com.helixz.oauth.demo.component.AuthTokenEnhancer;
 import com.helixz.oauth.demo.component.CustomClaimAccessTokenConverter;
-import com.helixz.oauth.demo.impl.OauthClientDetailsServiceImpl;
+import com.helixz.oauth.demo.service.impl.OauthClientDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

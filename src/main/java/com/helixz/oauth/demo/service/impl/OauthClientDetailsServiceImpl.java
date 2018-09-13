@@ -1,4 +1,4 @@
-package com.helixz.oauth.demo.impl;
+package com.helixz.oauth.demo.service.impl;
 
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 

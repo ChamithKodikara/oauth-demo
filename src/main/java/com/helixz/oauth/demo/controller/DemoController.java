@@ -1,4 +1,4 @@
-package com.helixz.oauth.demo;
+package com.helixz.oauth.demo.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
