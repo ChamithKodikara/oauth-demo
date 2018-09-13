@@ -1,5 +1,7 @@
 package com.helixz.oauth.demo.entity;
 
+import com.helixz.oauth.demo.component.StaticApplicationContext;
+import com.helixz.oauth.demo.config.ApplicationProperties;
 import com.helixz.oauth.demo.enums.UserStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +31,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private String status;
+    private UserStatus status;
 
     private Integer failedLoginAttemptCount;
 
@@ -68,21 +70,29 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return !UserStatus.DELETED.getValue().equalsIgnoreCase(status);
+        return status != UserStatus.DELETED;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        if (status == UserStatus.ACTIVE) {
+            return true;
+        } else if (status == UserStatus.TEMP_LOCKED_BAD_CREDENTIALS && lastFailedLoginDate != null) {
+            return lastFailedLoginDate.plusSeconds(StaticApplicationContext.getApplicationContext()
+                    .getBean(ApplicationProperties.class).getAuth().getFailedLoginAttemptAccountLockTimeout())
+                    .isBefore(LocalDateTime.now());
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return status != UserStatus.DELETED;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !(status == UserStatus.INACTIVE || status == UserStatus.PENDING_ACTIVATION || status == UserStatus.CREATED);
     }
 }
