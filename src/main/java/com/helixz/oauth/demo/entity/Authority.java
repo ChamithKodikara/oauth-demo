@@ -1,20 +1,26 @@
 package com.helixz.oauth.demo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 /**
  * 
  * @author Chamith
  *
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(catalog = "oauth_demo", name = "authority")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Authority implements GrantedAuthority {
 
 	@Id
@@ -24,14 +30,6 @@ public class Authority implements GrantedAuthority {
 	private String name;
 
 	private String code;
-
-	public Authority(String code) {
-		this.code = code;
-	}
-
-	public Authority() {
-
-	}
 
 	@Override
 	public String getAuthority() {

@@ -3,57 +3,62 @@ package com.helixz.oauth.demo.config;
 import com.helixz.oauth.demo.component.AuthTokenEnhancer;
 import com.helixz.oauth.demo.component.CustomClaimAccessTokenConverter;
 import com.helixz.oauth.demo.service.impl.OauthClientDetailsServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+
 import org.springframework.core.io.ClassPathResource;
+
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
 
+import java.util.Arrays;
 /**
  * @author Chamith
  */
 @Configuration
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    private final ApplicationProperties applicationProperties;
+    private final AuthenticationManager authenticationManager;
+    private final AuthTokenEnhancer authTokenEnhancer;
+    private final CustomClaimAccessTokenConverter customClaimAccessTokenConverter;
+    private final DataSource dataSource;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    @Qualifier("userServiceImpl")
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private ApplicationProperties applicationProperties;
-
-    @Autowired
-    private AuthTokenEnhancer authTokenEnhancer;
-
-    @Autowired
-    private CustomClaimAccessTokenConverter customClaimAccessTokenConverter;
-
-    @Autowired
-    private DataSource dataSource;
-
+    public AuthorizationServerConfig(ApplicationProperties applicationProperties, AuthenticationManager authenticationManager, AuthTokenEnhancer authTokenEnhancer, CustomClaimAccessTokenConverter customClaimAccessTokenConverter, DataSource dataSource, @Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
+        this.applicationProperties = applicationProperties;
+        this.authenticationManager = authenticationManager;
+        this.authTokenEnhancer = authTokenEnhancer;
+        this.customClaimAccessTokenConverter = customClaimAccessTokenConverter;
+        this.dataSource = dataSource;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer configurer) throws Exception {
@@ -93,13 +98,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     @Primary
     public DefaultTokenServices tokenServices() {
+
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
 
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(
-                Arrays.asList(authTokenEnhancer, accessTokenConverter()));
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(authTokenEnhancer, accessTokenConverter()));
         defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
 
         defaultTokenServices.setReuseRefreshToken(false);
@@ -109,9 +114,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         defaultTokenServices.setAuthenticationManager(authentication -> {
             UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
-
-            PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(
-                    authentication.getName(), authentication.getCredentials(), userDetails.getAuthorities());
+            PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(authentication.getName(), authentication.getCredentials(), userDetails.getAuthorities());
             token.setDetails(userDetails);
             return token;
         });
