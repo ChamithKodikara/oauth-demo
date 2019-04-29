@@ -1,8 +1,6 @@
 package com.helixz.oauth.demo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,11 +17,10 @@ import java.util.Set;
  * @author Chamith
  *
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(catalog = "oauth_demo", name = "role")
-@AllArgsConstructor
-@NoArgsConstructor
 public class Role {
 
 	@Id
