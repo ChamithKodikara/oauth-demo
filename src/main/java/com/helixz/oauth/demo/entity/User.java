@@ -3,12 +3,21 @@ package com.helixz.oauth.demo.entity;
 import com.helixz.oauth.demo.component.StaticApplicationContext;
 import com.helixz.oauth.demo.config.ApplicationProperties;
 import com.helixz.oauth.demo.enums.UserStatus;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.Data;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,8 +26,7 @@ import java.util.Set;
 /**
  * @author Chamith
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(catalog = "oauth_demo", name = "user")
 public class User implements UserDetails {

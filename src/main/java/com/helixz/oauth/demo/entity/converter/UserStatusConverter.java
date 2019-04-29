@@ -22,4 +22,3 @@ public class UserStatusConverter implements AttributeConverter<UserStatus, Strin
     }
 
 }
-

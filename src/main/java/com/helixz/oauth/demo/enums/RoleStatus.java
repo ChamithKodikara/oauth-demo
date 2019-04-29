@@ -1,5 +1,6 @@
 package com.helixz.oauth.demo.enums;
 
+import lombok.Getter;
 /**
  * 
  * @author Chamith
@@ -10,20 +11,15 @@ public enum RoleStatus {
 	INACTIVE("Inactive", "I"),
 	DELETED("Deleted", "D");
 
+	@Getter
 	private String label;
+
+	@Getter
 	private String value;
 
 	private RoleStatus(String label, String value) {
 		this.label = label;
 		this.value = value;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public String getLabel() {
-		return label;
 	}
 
 	public static RoleStatus getEnum(String value) {

@@ -12,8 +12,7 @@ import java.util.Map;
  * @author Chamith
  */
 @Component
-public class CustomClaimAccessTokenConverter extends DefaultAccessTokenConverter
-        implements JwtAccessTokenConverterConfigurer {
+public class CustomClaimAccessTokenConverter extends DefaultAccessTokenConverter implements JwtAccessTokenConverterConfigurer {
 
     @Override
     public void configure(JwtAccessTokenConverter converter) {
